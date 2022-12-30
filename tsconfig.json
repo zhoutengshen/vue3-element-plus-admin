@@ -1,0 +1,33 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": [
+    "src/**/*",
+    "src/**/*.vue",
+    "@types/**/*.d.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "stores/*": [
+        "./src/stores/*"
+      ]
+    },
+    "types": [
+      "unplugin-vue-define-options/macros-global"
+    ],
+    "lib": [
+      "ES2022",
+      "DOM",
+    ],
+    "target": "ES2015"
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    }
+  ]
+}
