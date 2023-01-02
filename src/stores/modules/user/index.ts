@@ -3,12 +3,21 @@ import { defineStore } from 'pinia'
 import { logout } from '@/api/user'
 import type { UserState } from './types'
 import { DefaultApiService } from '@/api'
+import { useAppStore } from '@/stores'
+const initStore = () => {
+  return {
+    roles: [],
+    isLogin: isLogin(),
+    name: undefined,
+    uid: undefined,
+    avatarUrl: undefined,
+    desc: undefined,
+  }
+}
 export const useUserStore = defineStore('user', {
+  /** NOTE 实例化是必须显式声明字段，如果不声明，那么是不会观察数据变化的 */
   state(): UserState {
-    return {
-      roles: [],
-      isLogin: isLogin(),
-    }
+    return initStore()
   },
   actions: {
     async fetchUserInfo() {
@@ -32,7 +41,8 @@ export const useUserStore = defineStore('user', {
       }
       await logout()
       this.isLogin = false
-      clearToken()
+      this.reset()
+      useAppStore().reset()
     },
     reset() {
       clearToken()
