@@ -6,6 +6,7 @@ import { MODULES_ROUTES } from '@/router/routes'
 import type { RouteRecordRaw } from 'vue-router'
 import { isObject } from '@/utils/is'
 import type { AppState, MenusRouteRecord } from './types'
+import { markRaw } from 'vue'
 
 const getLocalStoreThemeType = (): ThemeType => {
   const themeType = getLocalStoreValue<ThemeType>(THEME_KEY) || ThemeType.dark
@@ -18,8 +19,8 @@ const routesToMenusRoutes = (routes: RouteRecordRaw[]): MenusRouteRecord[] => {
     const menuRecord: MenusRouteRecord = {
       name: String(item.name),
       path: item.path,
-      props: isObject(item.props) ? { ...item.props } : item.props,
-      meta: item.meta,
+      props: isObject(item.props) ? { ...item.props } : item.props || {},
+      meta: markRaw({ ...item.meta }),
     }
     if (item.children) {
       menuRecord.children = routesToMenusRoutes(item.children)

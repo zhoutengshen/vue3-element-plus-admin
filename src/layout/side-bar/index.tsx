@@ -1,5 +1,5 @@
 import type { MenusRouteRecord } from '@/stores/modules/app/types'
-import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+import { ElIcon, ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
 import { defineComponent, computed } from 'vue'
 // @ts-ignore
 import { join } from 'path'
@@ -8,6 +8,7 @@ import 'element-plus/es/components/menu-item/style/index'
 import 'element-plus/es/components/sub-menu/style/index'
 import './index.scss'
 import { useRoute, useRouter } from 'vue-router'
+import { isVueComponent } from '@/utils/is'
 
 export default defineComponent({
   name: 'LayoutSideBar',
@@ -48,16 +49,29 @@ export default defineComponent({
         }
       }
 
+      const titleSlot = () => {
+        if (!meta || !meta.title) {
+          return null
+        }
+        const clazz = {
+          'is-active-path': route.path.includes(fullPath),
+        }
+        const renderTitleIcon = () =>
+          isVueComponent(meta.icon) ? (
+            <ElIcon class={clazz}>
+              <meta.icon />
+            </ElIcon>
+          ) : null
+        return (
+          <>
+            {renderTitleIcon()}
+            <span class={clazz}>{meta.title}</span>
+          </>
+        )
+      }
+
       const slots = {
-        title: () =>
-          meta?.title ? (
-            <div
-              class={{
-                'style.is-active-path': route.path.includes(fullPath),
-              }}>
-              {meta?.title}
-            </div>
-          ) : null,
+        title: titleSlot,
         default: () => children.map((item) => renderElSubMenus(item, fullPath)),
       }
       return <ElSubMenu index={fullPath}>{slots}</ElSubMenu>

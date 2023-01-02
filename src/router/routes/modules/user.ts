@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import DEFAULT_LAYOUT from '@/layout/default.vue'
+import { User } from '@element-plus/icons-vue'
 const USER_ROUTES: RouteRecordRaw[] = [
   {
     path: '/user',
@@ -7,6 +8,7 @@ const USER_ROUTES: RouteRecordRaw[] = [
     redirect: '/user/info',
     meta: {
       title: '用户',
+      icon: User,
     },
     children: [
       {
