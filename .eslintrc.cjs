@@ -14,6 +14,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  globals: {
+    defineOptions: 'readonly',
+  },
   rules: {
     'prettier/prettier': [
       2,

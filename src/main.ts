@@ -3,6 +3,7 @@ import piniaInstance from './stores/index'
 import App from './App.vue'
 import router from './router'
 import { startMockIfDev } from '@/mock'
+import '@/styles/index.scss'
 
 startMockIfDev()
 const app = createApp(App)

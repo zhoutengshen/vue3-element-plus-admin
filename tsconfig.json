@@ -7,6 +7,7 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "noImplicitAny": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -16,7 +17,8 @@
       ]
     },
     "types": [
-      "unplugin-vue-define-options/macros-global"
+      "unplugin-vue-define-options/macros-global",
+      "element-plus/global"
     ],
     "lib": [
       "ES2022",

@@ -70,7 +70,7 @@ const setupUser = () => {
   })
 
   Mock.mock(RegExp('/api/user-info'), (params) => {
-    console.log(params)
+    console.log(params, '=========')
     return successRespWrap<UserInfo>({
       roles: ['admin'],
       name: Mock.Random.name(),

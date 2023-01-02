@@ -1,15 +1,16 @@
 import { TOKEN_ID } from '@/constant'
+import { getLocalStoreValue, setLocalStoreValue } from '.'
 
 export const setToken = (token: string) => {
-  localStorage.setItem(TOKEN_ID, token)
+  setLocalStoreValue(TOKEN_ID, token)
 }
 
 export const getToken = () => {
-  return localStorage.getItem(TOKEN_ID)
+  return getLocalStoreValue<string>(TOKEN_ID)
 }
 
 export const clearToken = () => {
-  setToken('')
+  setLocalStoreValue(TOKEN_ID, null)
 }
 
 export const isLogin = () => {

@@ -34,5 +34,9 @@ export const useUserStore = defineStore('user', {
       this.isLogin = false
       clearToken()
     },
+    reset() {
+      clearToken()
+      this.$reset()
+    },
   },
 })

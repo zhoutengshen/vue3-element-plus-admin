@@ -1,0 +1,9 @@
+.side-bar-menu {
+  height: 100vh;
+  .is-active-path {
+    color: var(--el-menu-active-color);
+  }
+  &:not(.el-menu--collapse) {
+    width: 200px;
+  }
+}

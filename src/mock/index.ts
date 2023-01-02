@@ -1,11 +1,10 @@
 import { isProd } from '@/utils/env'
+import { setup } from 'mockjs'
+import { setupUser } from './user'
 export const startMockIfDev = () => {
   if (isProd()) {
     return
   }
-  import('mockjs').then(async ({ setup }) => {
-    const { setupUser } = await import('./user')
-    setupUser()
-    setup({})
-  })
+  setupUser()
+  setup({})
 }
