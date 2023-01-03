@@ -31,7 +31,7 @@ const handleLogin = () => {
   userStore.login(unref(username), unref(psw)).then((resp: boolean) => {
     if (resp) {
       const query = route.query as PageParams
-      router.replace(query.redirect || '/')
+      router.replace(query.redirect || '/dashboard')
     }
   })
 }

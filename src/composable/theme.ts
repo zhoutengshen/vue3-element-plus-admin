@@ -31,6 +31,7 @@ export const useTheme = (
         }
       })
       bodyTag.classList.value = classListStr
+
       setLocalStoreValue(THEME_KEY, usingThemeType.value)
     }
     watch(usingThemeType, () => {

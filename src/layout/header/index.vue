@@ -3,7 +3,7 @@
     <ElCol :span="12">
       <ElRow :justify="'start'">
         <ElIcon :size="20" @click="appStore.toggleMenusCollapse">
-          <IEpExpand v-if="appStore.collapse" />
+          <IEpExpand v-if="appStore.collapseSideMenus" />
           <IEpFold v-else></IEpFold>
         </ElIcon>
       </ElRow>
@@ -15,13 +15,18 @@
             class="el-switch"
             :active-icon="Sunny"
             :inactive-icon="MoonNight"
-            v-model="appStore.usingTheme"
+            v-model="appStore.usingThemeType"
             inline-prompt
             :active-value="ThemeType.dark"
             :inactive-value="ThemeType.light">
           </ElSwitch>
+          <ElTooltip :content="'全屏'">
+            <ElIcon :size="24" @click="handleFullScreen">
+              <FullScreen class="icon"></FullScreen>
+            </ElIcon>
+          </ElTooltip>
           <ElDropdown @command="handleSelectItem">
-            <ElAvatar :size="32" class="avatar" v-bind="avatarConfig"> </ElAvatar>
+            <ElAvatar :size="24" class="icon" v-bind="avatarConfig"> </ElAvatar>
             <template #dropdown>
               <ElDropdownMenu @command="handleSelectItem">
                 <ElDropdownItem
@@ -47,42 +52,64 @@ interface DropdownList {
 }
 enum CommandType {
   LOGOUT = 'LOGOUT',
+  SETTING = 'SETTING',
 }
 </script>
 <script lang="ts" setup>
 import { ThemeType } from '@/constant'
-import { navToLogin } from '@/router/utils'
+import { useRouter, useRoute } from 'vue-router'
 import { useAppStore, useUserStore } from '@/stores'
-import { Sunny, MoonNight, UserFilled, SwitchButton } from '@element-plus/icons-vue'
+import { Sunny, MoonNight, UserFilled, SwitchButton, Setting, FullScreen } from '@element-plus/icons-vue'
 import { computed, ref, markRaw, type Component, type Raw } from 'vue'
+import { useFullscreen } from '@vueuse/core'
+import { LOGIN_PAGE_NAME } from '@/router/constant'
 
 defineOptions({
   name: 'LayoutHeader',
 })
 const appStore = useAppStore()
 const userStore = useUserStore()
-const avatarConfig = computed(() => {
-  if (userStore.avatarUrl) {
-    return {
-      src: userStore.avatarUrl,
-    }
-  }
-  return {
-    icon: UserFilled,
-  }
-})
+const router = useRouter()
+const route = useRoute()
+const fullScreenHook = useFullscreen(document.querySelector('html'))
+const avatarConfig = computed(() => ({
+  src: userStore.avatarUrl,
+  icon: UserFilled,
+}))
+
 const dropdownList = ref<DropdownList[]>([
+  {
+    commandType: CommandType.SETTING,
+    label: '设置',
+    icon: markRaw(Setting),
+  },
   {
     commandType: CommandType.LOGOUT,
     label: '退出登录',
     icon: markRaw(SwitchButton),
   },
 ])
+
+const handleFullScreen = () => {
+  fullScreenHook.toggle()
+}
+
 const handleSelectItem = async (command: CommandType) => {
-  if (command === CommandType.LOGOUT) {
-    await userStore.logout()
-    navToLogin()
+  const commandsMapFunc: Record<CommandType, (v?: any) => any> = {
+    [CommandType.LOGOUT]: async () => {
+      await userStore.logout()
+      router.replace({
+        name: LOGIN_PAGE_NAME,
+        query: {
+          redirect: route.path,
+        },
+      })
+    },
+    [CommandType.SETTING]: function () {
+      appStore.isShowDrawer = true
+    },
   }
+  commandsMapFunc[command]?.()
 }
 </script>
 <style lang="scss" scoped>
@@ -94,7 +121,7 @@ const handleSelectItem = async (command: CommandType) => {
     --el-switch-off-color: var(--el-color-info);
   }
 
-  .avatar {
+  .icon {
     cursor: pointer;
   }
 }

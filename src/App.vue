@@ -9,6 +9,6 @@ import { toRef } from 'vue'
 import { useTheme } from './composable/theme'
 import { useAppStore } from './stores'
 const appStore = useAppStore()
-useTheme(toRef(appStore, 'usingTheme'))
+useTheme(toRef(appStore, 'usingThemeType'))
 useDevAllStore()
 </script>

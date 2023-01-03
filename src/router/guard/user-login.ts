@@ -1,32 +1,9 @@
 import { isLogin } from '@/utils/auth'
 import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router'
 import { useUserStore, useAppStore } from '@/stores'
-import { NOT_ACCESS } from '@/router/constant'
 
 const LOGIN_PAGE_PATH = '/login'
 
-/** 权限检测，判断是否有页面访问的权限 */
-const checkPromise = (needRoles: string[], ownRoles: string[]): boolean => {
-  if (!needRoles.length) {
-    return true
-  }
-  if (!ownRoles.length) {
-    return false
-  }
-  let pageNotNeedPermission = false
-  // 转换未hash 表，减少便利
-  const needRoleMap = needRoles.reduce((pre, next) => {
-    if (next === '*') {
-      pageNotNeedPermission = true
-    }
-    pre[next] = true
-    return pre
-  }, {} as Record<string, boolean>)
-  if (pageNotNeedPermission) {
-    return true
-  }
-  return ownRoles.some((item) => '*' === item || needRoleMap[item])
-}
 /** 白名单 */
 const WHITE_LIST = [LOGIN_PAGE_PATH]
 // 登录拦截
@@ -35,7 +12,7 @@ const userLoginGuard = async (
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) => {
-  const { path, meta } = to
+  const { path } = to
 
   // 已经登录
   if (isLogin()) {
@@ -54,7 +31,6 @@ const userLoginGuard = async (
         try {
           await userStore.fetchUserInfo()
         } catch (e) {
-          console.log(e)
           userStore.reset()
           appStore.reset()
           next({
@@ -63,14 +39,7 @@ const userLoginGuard = async (
           return
         }
       }
-      if (checkPromise(meta.roles || [], userStore.roles)) {
-        next()
-      } else {
-        next({
-          ...to,
-          name: NOT_ACCESS,
-        })
-      }
+      next()
     }
   } else {
     if (WHITE_LIST.includes(path)) {

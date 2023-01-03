@@ -1,27 +1,28 @@
 <template>
   <ElContainer class="layout-container" style="height: 100vh">
     <ElScrollbar>
-      <LayoutSideBar :menus="appStore.clientMenus" :collapse="appStore.collapse"></LayoutSideBar>
+      <LayoutSideBar></LayoutSideBar>
     </ElScrollbar>
     <ElContainer>
       <ElHeader>
         <LayoutHeader></LayoutHeader>
       </ElHeader>
       <ElMain>
-        <RouterView></RouterView>
+        <LayoutMain></LayoutMain>
       </ElMain>
     </ElContainer>
+    <LayoutDrawer></LayoutDrawer>
   </ElContainer>
 </template>
 
 <script lang="ts" setup>
 import LayoutHeader from './header/index.vue'
 import LayoutSideBar from './side-bar'
-import { useAppStore } from '@/stores'
+import LayoutMain from './main/index.vue'
+import LayoutDrawer from './drawer/index.vue'
 defineOptions({
   name: 'LayoutDefault',
 })
-const appStore = useAppStore()
 </script>
 
 <style scoped lang="scss">

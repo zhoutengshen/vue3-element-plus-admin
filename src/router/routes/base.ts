@@ -9,7 +9,7 @@ const BASE_ROUTES: RouteRecordRaw[] = [
   },
   {
     path: '/login',
-    name: ROUTES_CONSTANT.LOGIN,
+    name: ROUTES_CONSTANT.LOGIN_PAGE_NAME,
     component: () => import('@/views/login/index.vue'),
   },
   {
@@ -18,7 +18,7 @@ const BASE_ROUTES: RouteRecordRaw[] = [
     children: [
       {
         path: '/403',
-        name: ROUTES_CONSTANT.NOT_ACCESS,
+        name: ROUTES_CONSTANT.NOT_ACCESS_PAGE_NAME,
         component: () => import('@/views/exception/403/index.vue'),
       },
     ],
@@ -29,7 +29,7 @@ const BASE_ROUTES: RouteRecordRaw[] = [
     children: [
       {
         path: '/500',
-        name: ROUTES_CONSTANT.SERVER_ERROR,
+        name: ROUTES_CONSTANT.SERVER_ERROR_PAGE_NAME,
         component: () => import('@/views/exception/403/index.vue'),
       },
     ],
@@ -37,7 +37,7 @@ const BASE_ROUTES: RouteRecordRaw[] = [
 
   {
     path: '/:pathMatch(.*)*',
-    name: ROUTES_CONSTANT.NOT_FOUND,
+    name: ROUTES_CONSTANT.NOT_FOUND_PAGE_NAME,
     component: () => import('@/views/exception/404/index.vue'),
   },
 ]

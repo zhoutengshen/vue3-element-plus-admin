@@ -17,6 +17,7 @@ const USER_ROUTES: RouteRecordRaw[] = [
         meta: {
           roles: ['user', 'admin'],
           title: '个人信息',
+          icon: User,
         },
       },
     ],
