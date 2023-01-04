@@ -55,21 +55,21 @@ enum CommandType {
   SETTING = 'SETTING',
 }
 </script>
+
 <script lang="ts" setup>
 import { ThemeType } from '@/constant'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useAppStore, useUserStore } from '@/stores'
 import { Sunny, MoonNight, UserFilled, SwitchButton, Setting, FullScreen } from '@element-plus/icons-vue'
 import { computed, ref, markRaw, type Component, type Raw } from 'vue'
 import { useFullscreen } from '@vueuse/core'
-import { LOGIN_PAGE_NAME } from '@/router/constant'
+import routerNavHelper from '@/router/helper/routerNavHelper'
 
 defineOptions({
   name: 'LayoutHeader',
 })
 const appStore = useAppStore()
 const userStore = useUserStore()
-const router = useRouter()
 const route = useRoute()
 const fullScreenHook = useFullscreen(document.querySelector('html'))
 const avatarConfig = computed(() => ({
@@ -98,11 +98,8 @@ const handleSelectItem = async (command: CommandType) => {
   const commandsMapFunc: Record<CommandType, (v?: any) => any> = {
     [CommandType.LOGOUT]: async () => {
       await userStore.logout()
-      router.replace({
-        name: LOGIN_PAGE_NAME,
-        query: {
-          redirect: route.path,
-        },
+      routerNavHelper.loginReplace({
+        redirect: route.path,
       })
     },
     [CommandType.SETTING]: function () {

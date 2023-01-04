@@ -3,7 +3,7 @@ import axios from 'axios'
 import { AppConfig } from '@/configs/app'
 import { getToken } from '@/utils/auth'
 import { ApiCode } from '@/constant/request'
-import { navToLogin } from '@/router/utils'
+import routerNavHelper from '@/router/helper/routerNavHelper'
 
 /**
  * Put Get Post 使用函数重载，根据条件返回不同的类型
@@ -89,7 +89,7 @@ export class ApiService {
     if (apiCode !== ApiCode.INVALID_AUTH) {
       return
     }
-    navToLogin()
+    routerNavHelper.loginPush()
   }
 
   /** 附加数字签名 */

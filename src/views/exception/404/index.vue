@@ -5,8 +5,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { navToHomePage } from '@/router/utils'
+import routerNavHelper from '@/router/helper/routerNavHelper'
 const handleBackHome = () => {
-  navToHomePage()
+  routerNavHelper.dashboardReplace()
 }
 </script>

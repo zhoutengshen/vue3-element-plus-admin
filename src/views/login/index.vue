@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-type PageParams = {
+export type PageParams = {
   redirect: string
 }
 </script>
@@ -20,6 +20,7 @@ type PageParams = {
 import { ref, unref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRoute, useRouter } from 'vue-router'
+import routerNavHelper from '@/router/helper/routerNavHelper'
 
 defineOptions({ name: 'LoginIndex' })
 const userStore = useUserStore()
@@ -31,7 +32,11 @@ const handleLogin = () => {
   userStore.login(unref(username), unref(psw)).then((resp: boolean) => {
     if (resp) {
       const query = route.query as PageParams
-      router.replace(query.redirect || '/dashboard')
+      if (query.redirect) {
+        router.replace(query.redirect)
+      } else {
+        routerNavHelper.dashboardReplace()
+      }
     }
   })
 }
