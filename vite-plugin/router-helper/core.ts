@@ -32,26 +32,6 @@ interface Result {
  */
 type FileSourceResult = Record<string, Record<string, Result>>
 
-const vueSFCIndex = 1
-const getPageParamNameFromSFC = (filePath: string) => {
-  const checkHasExportPageParams = (arr: SFCStatements = []) => {
-    return arr.some((item) => {
-      // @ts-ignore
-      const isScriptExport = item.type === 'ExportNamedDeclaration' && item?.declaration?.id?.name === 'PageParams'
-      return isScriptExport
-    })
-  }
-  const file = readFileSync(filePath, 'utf-8')
-  const parseResult = parse(file)
-
-  if (!parseResult.descriptor.script && !parseResult.descriptor.scriptSetup) {
-    return
-  }
-  const script = compileScript(parseResult.descriptor, { id: `test_${vueSFCIndex}` })
-  const hasExportPageParams = checkHasExportPageParams([...(script.scriptAst || []), ...(script.scriptSetupAst || [])])
-  return hasExportPageParams ? `PageParam_${vueSFCIndex}` : undefined
-}
-
 export class Transform {
   private
   /**
@@ -218,15 +198,13 @@ export class Transform {
     return paths.join(' + ')
   }
 
+  /** TODO: 获取vue组件导出PageParam */
   private getPageParamName(filePath: string) {
     const realFilePath = join(this.option.baseUrl, filePath.replace('@', './src/'))
-    console.log('>>>>>>>>>>>')
+    console.log('>>>>>>>>>>>', realFilePath)
 
     if (!checkSourceFilesExist([realFilePath])) {
       return
     }
-    // TODO:
-    // const pageParamsName = getPageParamNameFromSFC(filePath)
-    // console.log(pageParamsName)
   }
 }
